@@ -102,21 +102,4 @@ public class fs_27_01_p2 {
         System.out.println(min);
     }
 }
-class Solution {
-    public int characterReplacement(String s, int k) {
-        int[] count = new int[26];
-        int maxcount = 0;
-        int maxlen = 0;
-        int i = 0;
-        for(int j=0;j<s.length();j++){
-            count[s.charAt(j) - 'A']++;
-            maxcount = Math.max(maxcount, count[s.charAt(j) - 'A']);
-            if((j-i+1)-maxcount > k){
-                count[s.charAt(i) - 'A']--;
-                i++;
-            }
-            maxlen = Math.max(maxlen, j-i+1);
-        }
-        return maxlen;
-    }
-}
+
