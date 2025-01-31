@@ -35,7 +35,6 @@ The output should include:
 	12-hour time format with AM/PM
 
 */
-
 const readline = require('readline');
 
 // Set up readline interface for reading input
@@ -44,10 +43,36 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
+// Function to get the ordinal suffix for a given day
+const getOrdinalSuffix = (day) => {
+  if (day >= 11 && day <= 13) return day + 'th';
+  const lastDigit = day % 10;
+  switch (lastDigit) {
+    case 1: return day + 'st';
+    case 2: return day + 'nd';
+    case 3: return day + 'rd';
+    default: return day + 'th';
+  }
+};
+
 // Function to convert date string
 const convertDateString = (dateStr) => {
- //Write your code here and return formattedString
+  const dateObj = new Date(dateStr);
 
+  const day = dateObj.getDate();
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const month = monthNames[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+
+  let hours = dateObj.getHours();
+  const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+  const seconds = String(dateObj.getSeconds()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12 || 12; // Convert to 12-hour format
+  const formattedTime = `${String(hours).padStart(2, '0')}:${minutes}:${seconds}${ampm}`;
+
+  return `${getOrdinalSuffix(day)} ${month}, ${year} ${formattedTime}`;
 };
 
 // Function to read input and process the date string
