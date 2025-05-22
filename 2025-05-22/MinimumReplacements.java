@@ -100,3 +100,50 @@ class MinimumReplacements {
         return (l1 - mfreq1) + (l2 - mfreq2);
     }
 }
+// import java.util.*;
+// class test{
+//     public static void main(String args[]){
+//         Scanner sc = new Scanner(System.in);
+//         String s1 = sc.next();
+//         String s2 = sc.next();
+//         int min = Integer.MAX_VALUE;
+        
+//         for(char c1='a';c1<='z';c1++){
+//             for(char c2='a';c2<='z';c2++){
+//                 int x = cost(s1, c1)+cost(s2, c2);
+//                 min = Math.min(min, x);
+//             }
+//         }
+//         for(char c='b';c<='z';c++){
+//             int cost1=0, cost2=0;
+//             for(char ch:s1.toCharArray()){
+//                 if(ch>=c)cost1++;
+//             }
+//             for(char ch:s2.toCharArray()){
+//                 if(ch<c)cost2++;
+//             }
+//             min = Math.min(min, cost1+cost2);
+            
+//         }
+//         for(char c='b';c<='z';c++){
+//             int cost1=0, cost2=0;
+//             for(char ch:s1.toCharArray()){
+//                 if(ch<c)cost1++;
+//             }
+//             for(char ch:s2.toCharArray()){
+//                 if(ch>=c)cost2++;
+//             }
+//             min = Math.min(min, cost1+cost2);
+            
+//         }
+        
+//         System.out.println(min);
+//     }
+//     public static int cost(String s, char a){
+//         int c=0;
+//         for(char ch:s.toCharArray()){
+//             if(ch!=a)c++;
+//         }
+//         return c;
+//     }
+// }
