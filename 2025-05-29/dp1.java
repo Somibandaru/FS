@@ -64,3 +64,31 @@ class test{
     }
 
 }
+//using backtracking TLE
+// import java.util.*;
+// class test{
+//     public static void main(String args[]){
+//     static int max=0;
+//     public static void main(String args[]){
+//         Scanner sc = new Scanner(System.in);
+//         int n = sc.nextInt();
+//         StringBuilder str = new StringBuilder();
+//         bt(n, 0, str, 0);
+//         System.out.println(max);
+//     }
+//     public static void bt(int n, int count, StringBuilder str, int copied){
+//         if(n<0)return;
+//         if(n==0){
+//             max = Math.max(max, count);
+//             // System.out.print(str+" ");
+//             return;
+//         }
+//         bt(n-1, count+1, str.append('N'), copied);
+//         if(count>0 && str.charAt(str.length()-1)!='C'){
+//             bt(n-2, count, str.append("SC"), count);
+//         }
+//         if(str.charAt(str.length()-1)=='P' || str.charAt(str.length()-1)=='C')
+//             bt(n-1, count+copied, str.append('P'), copied);
+        
+//     }
+// }
