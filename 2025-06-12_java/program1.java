@@ -36,26 +36,65 @@ Sample Output:
 --------------
 40 30 10 10
 */
+//TLE
+// import java.util.*;
+// class test{
+//     public static void main(String args[]){
+//         Scanner sc = new Scanner(System.in);
+//         int n = sc.nextInt();
+//         int[] a = new int[n];
+//         for(int i=0;i<n;i++) a[i] = sc.nextInt();
+//         int[] res = new int[n];
+//         int w = 1;
+//         for(int i=1;i<=n;i++){
+//             int max = 0;
+//             for(int j=0;j<=n-i;j++){
+//                 int min = Integer.MAX_VALUE;
+//                 for(int k=0;k<i;k++){
+//                     min = Math.min(min,a[k+j]);
+//                 }
+//                 max = Math.max(max,min);
+//             }
+//             res[i-1] = max;
+//         }
+//         for(int x : res) System.out.print(x + " ");
+//     }
+// }
+
+
+
+
+
 import java.util.*;
 class test{
     public static void main(String args[]){
         Scanner sc = new Scanner(System.in);
         int n = sc.nextInt();
-        int[] a = new int[n];
-        for(int i=0;i<n;i++) a[i] = sc.nextInt();
-        int[] res = new int[n];
-        int w = 1;
-        for(int i=1;i<=n;i++){
-            int max = 0;
-            for(int j=0;j<=n-i;j++){
-                int min = Integer.MAX_VALUE;
-                for(int k=0;k<i;k++){
-                    min = Math.min(min,a[k+j]);
+        int arr[] = new int[n];
+        for(int i=0;i<n;i++)arr[i]=sc.nextInt();
+        
+        int res[] = new int[n];
+        for(int len=1;len<=n;len++){
+            Deque<Integer> dq = new LinkedList<>();
+            int max = Integer.MIN_VALUE;
+            for(int i=0;i<n;i++){
+                while(!dq.isEmpty() && dq.peekFirst()<=i-len){
+                    dq.pollFirst();
                 }
-                max = Math.max(max,min);
+                while(!dq.isEmpty() && arr[dq.peekLast()]>=arr[i]){
+                    dq.pollLast();
+                }
+                dq.offerLast(i);
+                
+                if(i>=len-1){
+                    max=Math.max(max, arr[dq.peekFirst()]);
+                }
             }
-            res[i-1] = max;
+            res[len-1] = max;
         }
-        for(int x : res) System.out.print(x + " ");
+        
+        
+        for(int i=0;i<n;i++)System.out.print(res[i]+" ");
+        
     }
 }
