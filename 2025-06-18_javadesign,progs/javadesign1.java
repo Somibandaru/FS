@@ -70,40 +70,156 @@ Customer: David, Score: 100.0, Risk Level: Low
 Customer: Eva, Score: 36.0, Risk Level: High                                                                                                          
 Customer: Frank, Score: 80.0, Risk Level: Low 
 */
+// import java.util.ArrayList;
+// import java.util.List;
+// import java.util.Scanner;
+
+// class Customer {
+//     // TODO: Define private fields for name, income, debt, missedPayments
+//     // TODO: Add constructor, getters, setters
+// }
+
+// class CreditReport {
+//     // TODO: Define Customer customer, double score, String riskLevel
+//     // TODO: Constructor and toString() method
+// }
+
+// public interface RiskAnalyzer {
+//     CreditReport analyzeRisk(Customer customer);
+// }
+
+// class CreditRiskAnalyzerImpl implements RiskAnalyzer {
+
+//     @Override
+//     public CreditReport analyzeRisk(Customer customer) {
+//         // TODO: Implement score calculation and risk classification
+//         return null;
+//     }
+// }
+
+
+// public class Main {
+//     public static void main(String[] args) {
+//         Scanner sc = new Scanner(System.in);
+//         int n = Integer.parseInt(sc.nextLine());
+
+//         List<Customer> customers = new ArrayList<>();
+//         for (int i = 0; i < n; i++) {
+//             String name = sc.nextLine();
+//             double income = Double.parseDouble(sc.nextLine());
+//             double debt = Double.parseDouble(sc.nextLine());
+//             int missedPayments = Integer.parseInt(sc.nextLine());
+
+//             customers.add(new Customer(name, income, debt, missedPayments));
+//         }
+
+//         RiskAnalyzer analyzer = new CreditRiskAnalyzerImpl();
+
+//         for (Customer customer : customers) {
+//             CreditReport report = analyzer.analyzeRisk(customer);
+//             System.out.println(report);
+//         }
+//     }
+// }
+//solution:
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// 1. POJO: Customer
 class Customer {
-    // TODO: Define private fields for name, income, debt, missedPayments
-    // TODO: Add constructor, getters, setters
+    private String name;
+    private double income;
+    private double debt;
+    private int missedPayments;
+
+    // Constructor
+    public Customer(String name, double income, double debt, int missedPayments) {
+        this.name = name;
+        this.income = income;
+        this.debt = debt;
+        this.missedPayments = missedPayments;
+    }
+
+    // Getters
+    public String getName() {
+        return this.name;
+    }
+
+    public double getIncome() {
+        return this.income;
+    }
+
+    public double getDebt() {
+        return this.debt;
+    }
+
+    public int getMissedPayments() {
+        return this.missedPayments;
+    }
 }
 
+// 2. POJO: CreditReport
 class CreditReport {
-    // TODO: Define Customer customer, double score, String riskLevel
-    // TODO: Constructor and toString() method
+    private Customer customer;
+    private double score;
+    private String riskLevel;
+
+    // Constructor
+    public CreditReport(Customer customer, double score, String riskLevel) {
+        this.customer = customer;
+        this.score = score;
+        this.riskLevel = riskLevel;
+    }
+
+    // toString for pretty printing
+    @Override
+    public String toString() {
+        return "Customer: " + customer.getName() + ", Score: " + score + ", Risk Level: " + riskLevel;
+    }
 }
 
-public interface RiskAnalyzer {
+// 3. Interface: RiskAnalyzer
+interface RiskAnalyzer {
     CreditReport analyzeRisk(Customer customer);
 }
 
+// 4. Implementation class: CreditRiskAnalyzerImpl
 class CreditRiskAnalyzerImpl implements RiskAnalyzer {
 
     @Override
     public CreditReport analyzeRisk(Customer customer) {
-        // TODO: Implement score calculation and risk classification
-        return null;
+        // Score calculations based on formula
+        double incomeScore = Math.min(1, customer.getIncome() / 100000.0);
+        double debtScore = 1 - Math.min(1, customer.getDebt() / 50000.0);
+        double missedPaymentsScore = 1 - Math.min(1, customer.getMissedPayments() / 10.0);
+
+        double finalScore = (0.4 * incomeScore + 0.4 * debtScore + 0.2 * missedPaymentsScore) * 100;
+
+        // Determine risk level
+        String riskLevel;
+        if (finalScore >= 80) {
+            riskLevel = "Low";
+        } else if (finalScore >= 50) {
+            riskLevel = "Medium";
+        } else {
+            riskLevel = "High";
+        }
+
+        // Return the credit report
+        return new CreditReport(customer, finalScore, riskLevel);
     }
 }
 
-
+// 5. Main class to run the program
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int n = Integer.parseInt(sc.nextLine());
+        int n = Integer.parseInt(sc.nextLine()); // number of customers
 
         List<Customer> customers = new ArrayList<>();
+
+        // Read n customer profiles
         for (int i = 0; i < n; i++) {
             String name = sc.nextLine();
             double income = Double.parseDouble(sc.nextLine());
@@ -113,11 +229,14 @@ public class Main {
             customers.add(new Customer(name, income, debt, missedPayments));
         }
 
+        // Create analyzer and generate reports
         RiskAnalyzer analyzer = new CreditRiskAnalyzerImpl();
 
         for (Customer customer : customers) {
             CreditReport report = analyzer.analyzeRisk(customer);
             System.out.println(report);
         }
+
+        sc.close();
     }
 }
