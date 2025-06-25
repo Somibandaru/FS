@@ -120,3 +120,102 @@ class MovieAnalyzerImpl implements MovieAnalyzer {
         return null; // replace with your logic
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+//solution:
+
+import java.util.*;
+
+public class experian {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = Integer.parseInt(sc.nextLine());
+
+        List<Movie> movies = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            String title = sc.nextLine();
+            double rating = Double.parseDouble(sc.nextLine());
+            String review = sc.nextLine();
+
+            movies.add(new Movie(title, rating, review));
+        }
+
+        MovieAnalyzer analyzer = new MovieAnalyzerImpl();
+
+        for (Movie m : movies) {
+            MovieReport report = analyzer.analyze(m);
+            System.out.println(report);
+        }
+    }
+}
+
+// TODO: Implement this POJO class
+class Movie {
+	private String title;
+	private double rating;
+	private String review;
+	Movie(String title, double rating, String review){
+		this.title = title;
+		this.rating = rating;
+		this.review = review;
+	}
+	public String getTitle() {
+		return this.title;
+	}
+	public double getRating() {
+		return this.rating;
+	}
+	public String getReview() {
+		return this.review;
+	}
+}
+
+// TODO: Implement this POJO class
+class MovieReport {
+	private Movie movie;
+	private double score;
+	private String category;
+	MovieReport(Movie movie, double score, String category){
+		this.movie = movie;
+		this.score = score;
+		this.category = category;
+	}
+	
+	public String toString() {
+		return String.format("Movie: %s, Score: %.1f, Category: %s",this.movie.getTitle(),this.score,this.category);
+	}
+}
+
+// TODO: Define this interface
+interface MovieAnalyzer {
+    MovieReport analyze(Movie movie);
+}
+
+// TODO: Implement this class
+class MovieAnalyzerImpl implements MovieAnalyzer {
+    @Override
+    public MovieReport analyze(Movie movie) {
+        
+    	double ratingScore = movie.getRating()/5.0;
+    	double reviewScore = Math.min(1.0, (movie.getReview()).length()/200.0);
+    	
+    	double score = (0.6 * ratingScore + 0.4* reviewScore)*100;
+    	
+    	String category="";
+    	if(score>=80) category="Blockbuster";
+    	else if(score>=50 && score<=79) category = "Hit";
+    	else category="Flop";
+    			
+        return new MovieReport(movie, score, category); // replace with your logic
+    }
+}
