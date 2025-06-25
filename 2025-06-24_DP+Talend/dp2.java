@@ -48,3 +48,32 @@
 // Sample Output-2:
 // ------------------
 // [BZA, BLR, CCU, BZA, CCU, BLR]
+import java.util.*;
+class test{
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        String input[]= sc.nextLine().split(",");
+        List<String> res = new ArrayList<>();
+        
+        Map<String, PriorityQueue<String>> map = new HashMap<>();
+        
+        for(String s:input){
+            String strs[] = s.split(" ");
+            String from = strs[0];
+            String to = strs[1];
+            
+            if(!map.containsKey(from)) map.put(from, new PriorityQueue<>());
+            map.get(from).add(to);
+            
+        }
+        dfs("BZA", map, res);
+        System.out.println(res);
+    }
+    public static void dfs(String key, Map<String, PriorityQueue<String>> map, List<String> res){
+        PriorityQueue<String> pq = map.get(key);
+        while(pq!=null && !pq.isEmpty()){
+            dfs(pq.poll(), map, res);
+        }
+        res.add(0, key);
+    }
+}
