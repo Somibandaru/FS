@@ -117,7 +117,14 @@ public class Main {
 class Order {
 	// Fields: customerName, productName, quantity
     // Constructor to initialize all fields.
-
+    String customerName;
+    String productName;
+    int quantity;
+    public Order(String customerName, String productName, int quantity){
+        this.customerName = customerName;
+        this.productName = productName;
+        this.quantity = quantity;
+    }
 }
 
 class IndexedOrder {
@@ -132,7 +139,7 @@ class IndexedOrder {
 
 // ✅ Interface
 interface OrderValidator {
-    
+    void validate(Order order) throws ProductNotFoundException, InvalidQuantityException;
 }
 
 // 🚧 TODO: Implement this class
@@ -142,18 +149,28 @@ class SimpleOrderValidator implements OrderValidator {
     public void validate(Order order) throws ProductNotFoundException, InvalidQuantityException {
         // TODO: 
         // 1. If product is not in validProducts, throw ProductNotFoundException
+        if(!validProducts.contains(order.productName)){
+            throw new ProductNotFoundException("Invalid product: " + order.productName);
+        }
         // 2. If quantity <= 0, throw InvalidQuantityException
+        if(order.quantity <= 0){
+            throw new InvalidQuantityException("Invalid quantity: " + order.quantity);
+        }
     }
 }
 
 // 🚧 TODO: Define this custom exception
 class ProductNotFoundException extends Exception {
-    
+    public ProductNotFoundException(String msg){
+        super(msg);
+    }
 }
 
 // 🚧 TODO: Define this custom exception
 class InvalidQuantityException extends Exception {
-    
+    public InvalidQuantityException(String msg){
+        super(msg);
+    }
 }
 
 // 🚧 TODO: Implement run() with synchronized processing
@@ -163,13 +180,25 @@ class OrderProcessor implements Runnable {
     private Map<Integer, String> outputMap;
     
     // Implement Contructor
-    
-   public void run() {
+    public OrderProcessor(IndexedOrder indexedOrder, OrderValidator validator, Map<Integer, String> outputMap){
+        this.indexedOrder = indexedOrder;
+        this.validator = validator;
+        this.outputMap = outputMap;
+    }
+    public void run() {
         Order order = indexedOrder.order;
         try {
             // TODO: Validate and process the order
-        } catch (Exception e) {
+            validator.validate(order);
+            Thread.sleep(1000 + new Random().nextInt(1001));
+            String msg = "Order accepted: " + order.customerName + " ordered " + order.quantity + " of " + order.productName;
+            outputMap.put(indexedOrder.index,msg);
+        } catch (ProductNotFoundException | InvalidQuantityException e) {
             // TODO: Save failure message
+            String msg = "Order failed: " + order.customerName + " - " + e.getClass().getSimpleName();
+            outputMap.put(indexedOrder.index,msg);
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
         }
     }
 }
